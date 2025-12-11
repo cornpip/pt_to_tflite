@@ -4,3 +4,6 @@ saved_model/*
 tflite/*
 
 test.txt
+/yolo11_to_tflite/test.txt
+/__pycache__
+/yolo11_to_tflite/yolo11n_saved_model/

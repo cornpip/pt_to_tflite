@@ -1,0 +1,3 @@
+docker pull ultralytics/ultralytics:latest
+
+docker run -it --gpus all -v ${pwd}:/workspace ultralytics/ultralytics:latest /bin/bash
