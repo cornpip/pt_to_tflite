@@ -1,22 +1,31 @@
 """
-Download YOLO11n, export it to TFLite, and run a quick smoke test.
-
-Ultralytics automatically downloads `yolo11n.pt` to its cache if the file is
-missing in the working directory. After the export we load the produced
-`yolo11n_float32.tflite` and run inference on the sample bus image to verify
-the pipeline.
+Export a YOLO11 PyTorch checkpoint to TFLite.
 """
+
+from __future__ import annotations
+
+import argparse
+from pathlib import Path
 
 from ultralytics import YOLO
 
 
-def main() -> None:
-    # 1) Load the PyTorch checkpoint (downloaded automatically if needed)
-    model = YOLO("yolo11n.pt")
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description="Export YOLO11 .pt model to TFLite")
+    parser.add_argument(
+        "input",
+        help="Input YOLO .pt file path",
+    )
+    return parser.parse_args()
 
-    # 2) Export to TFLite (float32). Setting dynamic=False keeps TensorFlow Lite
-    #    happy, because dynamic shapes tend to crash on mobile runtimes.
-    model.export(format="tflite", dynamic=False)  # -> yolo11n_float32.tflite
+
+def main() -> None:
+    args = parse_args()
+    model_path = Path(args.input).expanduser().resolve()
+
+    model = YOLO(str(model_path))
+
+    model.export(format="tflite", dynamic=False)
 
 
 if __name__ == "__main__":
